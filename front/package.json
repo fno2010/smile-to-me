@@ -1,0 +1,31 @@
+{
+  "name": "smile-to-me-ui",
+  "homepage": "https://github.com/fno2010/smile-to-me",
+  "authors": [
+    "jensenzhang <jingxuan.n.zhang@gmail.com>"
+  ],
+  "description": "A HTML5 Front for Smile-to-Me.",
+  "main": "server.js",
+  "config": {
+    "port": "8080"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "express": "4.x",
+    "ejs": "2.x"
+  }
+}

@@ -1,16 +1,52 @@
-<script src="js/webcam.js"></script> 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"></meta>
+    <title>Smile to Me</title>
+</head>
+<body>
+    <script src="js/webcam.js"></script> 
+    <script src="js/clmtrackr.js"></script>
+    <script src="js/model_pca_20_svm_emotionDetection.js"></script>
 
-<div id="my_camera" style="width:320px; height:240px;"></div>
-<div id="my_result"></div>
+    <div id="main">
+        <canvas id="my_canvas" width="400" height="300" style="position: absolute; top: 0px: left: 0px"></canvas>
+        <div id="my_camera" style="width:400px; height:300px;"></div>
+    </div>
+    <div id="my_result"></div>
 
-<script language="JavaScript">
-    Webcam.attach( '#my_camera' );
-    
-    function take_snapshot() {
-        Webcam.snap( function(data_uri) {
-            document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
-        } );
-    }
-</script> 
+    <script language="JavaScript">
+        Webcam.attach( '#my_camera' );
+        
+        function take_snapshot() {
+            Webcam.snap( function(data_uri) {
+                document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
+            } );
+        }
 
-<a href="javascript:void(take_snapshot())">Take Snapshot</a>
+        var videoInput = document.getElementById('my_camera').children[1];
+        videoInput.width = videoInput.offsetWidth;
+        videoInput.height = videoInput.offsetHeight;
+        var canvasInput = document.getElementById('my_canvas');
+        var cc = canvasInput.getContext('2d');
+
+        var ctracker = new clm.tracker();
+        ctracker.init(pModel);
+        ctracker.start(videoInput);
+
+        function positionLoop() {
+            requestAnimationFrame(positionLoop);
+            var positions = ctracker.getCurrentPosition();
+            if (positions) {
+                document.getElementById('my_positions').innerHTML = positions;
+                cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+                ctracker.draw(canvasInput);
+            }
+        }
+        positionLoop();
+    </script> 
+
+    <a href="javascript:void(take_snapshot())">Take Snapshot</a>
+    <div id="my_positions"></div>
+</body>
+</html>

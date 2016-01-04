@@ -122,13 +122,15 @@ class ImagenetClassifier(object):
             caffe.set_mode_cpu()
         with open(mean_file) as f:
             blob = caffe.proto.caffe_pb2.BlobProto()
-            blob.ParseFromString(f)
+            blob.ParseFromString(f.read())
             mean_arr = np.array(caffe.io.blobproto_to_array(blob))
+            mean_resize = caffe.io.resize_image(mean_arr[0].transpose((1,2,0)),
+                                                (224,224)).transpose((2,0,1))
         self.net = caffe.Classifier(
             model_def_file, pretrained_model_file,
             image_dims=(image_dim, image_dim), raw_scale=raw_scale,
             # mean=np.load(mean_file).mean(1).mean(1), channel_swap=(2, 1, 0)
-            mean=mean_arr.mean(1).mean(1), channel_swap=(2, 1, 0)
+            mean=mean_resize, channel_swap=(2, 1, 0)
         )
 
         with open(class_labels_file) as f:

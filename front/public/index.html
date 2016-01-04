@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"></meta>
     <title>Smile to Me</title>
-</head>
-<body>
+    <meta charset="utf-8">
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="js/webcam.js"></script> 
     <script src="js/clmtrackr.js"></script>
     <script src="js/model_pca_20_svm_emotionDetection.js"></script>
-
-    <div id="main">
-        <canvas id="my_canvas" width="400" height="300" style="position: absolute; top: 0px: left: 0px"></canvas>
-        <div id="my_camera" style="width:400px; height:300px;"></div>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+    body {
+        background-color: silver;
+    }
+    my_positions {
+        width: 100%;
+        height: 200px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <center style="margin: 50 auto;">
+            <h1>Smile to Me</h1>
+        </center>
+        <div class="row">
+            <div class="col-md-5 col-sm-5 col-md-offset-2 col-sm-offset-2">
+                <canvas id="my_canvas" width="400" height="300" style="position: absolute; top: 0px: left: 0px"></canvas>
+                <div id="my_camera" style="width:400px; height:300px;"></div>
+            </div>
+            <div class="col-md3 col-sm-3">
+                <textarea id="my_positions" class="input-lg center" readonly="readonly"></textarea>
+                <div id="my_result"></div>
+                <a class="btn btn-info" href="javascript:void(take_snapshot())">Take Snapshot</a>
+            </div>
+        </div>
     </div>
-    <div id="my_result"></div>
 
+    <!-- JavaScript to handle Camera and Face Recognition -->
     <script language="JavaScript">
         Webcam.attach( '#my_camera' );
         
@@ -45,8 +68,5 @@
         }
         positionLoop();
     </script> 
-
-    <a href="javascript:void(take_snapshot())">Take Snapshot</a>
-    <div id="my_positions"></div>
 </body>
 </html>

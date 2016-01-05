@@ -1,6 +1,6 @@
 FROM visionai/clouddream
 WORKDIR /opt/caffe
-#RUN ./data/ilsvrc12/get_ilsvrc_aux.sh
+RUN mkdir /opt/caffe/models/emotion-classfication
 ADD models/deploy.txt /opt/caffe/models/emotion-classfication/deploy.prototxt
 ADD models/EmotiW_VGG_S.caffemodel /opt/caffe/models/emotion-classfication/EmotiW_VGG_S.caffemodel
 ADD models/mean.binaryproto /opt/caffe/models/emotion-classfication/mean.binaryproto

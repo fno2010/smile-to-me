@@ -25,11 +25,12 @@
             <h1>Smile to Me</h1>
         </center>
         <div class="row">
-            <div class="col-md-5 col-sm-5 col-md-offset-2 col-sm-offset-2">
+            <div class="col-md-5 col-sm-5 col-md-offset-1 col-sm-offset-1">
                 <canvas id="my_canvas" width="400" height="300" style="position: absolute; top: 0px: left: 0px"></canvas>
                 <div id="my_camera" style="width:400px; height:300px;"></div>
             </div>
-            <div class="col-md3 col-sm-3">
+            <div class="col-md-5 col-sm-5">
+                <div id="my_result" style="width:400px; height:300px;"></div>
                 <div>
                     <p>Detected Emotion:</p>
                     <table>
@@ -41,30 +42,31 @@
                             </thead>
                             <tbody id="my_emotion">
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Smile</td>
+                                <td>NaN</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Happy</td>
+                                <td>NaN</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Surprise</td>
+                                <td>NaN</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Anger</td>
+                                <td>NaN</td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>Sad</td>
+                                <td>NaN</td>
                             </tr>
                         </tbody>
                     </table>
+                    <p>Time Elapse: <span id="my_time">NaN</span></p>
                 </div>
                 <!--<textarea id="my_positions" class="input-lg center" readonly="readonly"></textarea>-->
-                <div id="my_result"></div>
+                <input id="my_url" type="text" class="input-lg" />
                 <a class="btn btn-info" href="javascript:void(take_snapshot())">Take Snapshot</a>
                 <a class="btn btn-primary" href="javascript:void(smile_to_me())">Smile?</a>
             </div>
@@ -75,27 +77,43 @@
     <script language="JavaScript">
         Webcam.attach( '#my_camera' );
 
-        function smile_to_me() {
-            // Get image data from #my_result
-            var image_base64 = $('#my_result').children('img').attr('src').split(',')[1];
-            // Push image data to http://127.0.0.1:5000/classfy_url
-            $.ajax({
-                url: "http://127.0.0.1:5000/classify_base64",
-                type: "POST",
-                data: {
-                    base64: image_base64
-                },
-                success: function(data) {
-                    var result = data['result'];
-                    if (result) {
-                        var tbody = $('#my_emotion').children();
-                        for (var i=0; i<5; i++) {
-                            tbody.eq(i).children('td').eq(0).html(result[1][i][0]);
-                            tbody.eq(i).children('td').eq(1).html(result[1][i][1]);
-                        }
-                    }
+        function handle_ajax(data) {
+            var result = data['result'];
+            if (result) {
+                var tbody = $('#my_emotion').children();
+                for (var i=0; i<5; i++) {
+                    tbody.eq(i).children('td').eq(0).html(result[1][i][0]);
+                    tbody.eq(i).children('td').eq(1).html(result[1][i][1]);
                 }
-            });
+                $('#my_time').html(result[2]);
+            }
+        }
+
+
+        function smile_to_me() {
+            var image_url = $('#my_url').val();
+            if (image_url == '') {
+                // Get image data from #my_result
+                var image_base64 = $('#my_result').children('img').attr('src').split(',')[1];
+                // Push image data to http://127.0.0.1:5000/classfy_url
+                $.ajax({
+                    url: "http://127.0.0.1:5000/classify_base64",
+                    type: "POST",
+                    data: {
+                        base64: image_base64
+                    },
+                    success: handle_ajax
+                });
+            } else {
+                $.ajax({
+                    url: "http://127.0.0.1:5000/classify_url",
+                    type: "GET",
+                    data: {
+                        imageurl: image_url
+                    },
+                    success: handle_ajax
+                });
+            }
         }
         
         function take_snapshot() {

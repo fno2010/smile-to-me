@@ -2,6 +2,7 @@ Smile to me
 ===========
 
 Author: Jensen Zhang (jingxuan.n.zhang@gmail.com)
+
 Collaborators: Sihan Chen, Lei Wang, Xin Liu
 
 ## Introduction
@@ -27,6 +28,20 @@ cd vagrant
 vagrant init
 vagrant up
 ```
+
+You can also deploy the demo by docker.
+
+``` bash
+cd back
+docker build -t caffe_emotiw .
+docker run -p 5000:5000 caffe_emotiw
+
+cd ../front
+npm install
+npm start
+```
+
+And then, you can go to `http://127.0.0.1:8080` in your web browser to view the demo.
 
 ## Build the demo from source code
 

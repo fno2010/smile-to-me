@@ -13,7 +13,7 @@
     body {
         background-color: silver;
     }
-    my_positions {
+    #my_positions {
         width: 100%;
         height: 200px;
     }
@@ -30,9 +30,43 @@
                 <div id="my_camera" style="width:400px; height:300px;"></div>
             </div>
             <div class="col-md3 col-sm-3">
+                <div>
+                    <p>Detected Emotion:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Emotion</th>
+                                <th>Possibility</th>
+                            </tr>
+                            </thead>
+                            <tbody id="my_emotion">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <textarea id="my_positions" class="input-lg center" readonly="readonly"></textarea>
                 <div id="my_result"></div>
                 <a class="btn btn-info" href="javascript:void(take_snapshot())">Take Snapshot</a>
+                <a class="btn btn-primary" href="javascript:void(smile_to_me())">Smile?</a>
             </div>
         </div>
     </div>
@@ -40,6 +74,29 @@
     <!-- JavaScript to handle Camera and Face Recognition -->
     <script language="JavaScript">
         Webcam.attach( '#my_camera' );
+
+        function smile_to_me() {
+            // Get image data from #my_result
+            var image_base64 = $('#my_result').children('img').attr('src').split(',')[1];
+            // Push image data to http://127.0.0.1:5000/classfy_url
+            $.ajax({
+                url: "http://127.0.0.1:5000/classfy_url",
+                type: "POST",
+                data: {
+                    base64: image_base64
+                },
+                success: function(data) {
+                    var result = JSON.parse(data)['result'];
+                    if (result) {
+                        var tbody = $('#my_emotion').children();
+                        for (var i=0; i<5; i++) {
+                            tbody.eq(i).children('td').eq(0).html(result[1][i][0]);
+                            tbody.eq(i).children('td').eq(1).html(result[1][i][1]);
+                        }
+                    }
+                }
+            });
+        }
         
         function take_snapshot() {
             Webcam.snap( function(data_uri) {

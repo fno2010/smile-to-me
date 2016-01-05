@@ -51,6 +51,22 @@ def classify_url():
     result = app.clf.classify_image(image)
     return flask.jsonify(result = result)
 
+@app.route('/classify_base64', methods=['POST'])
+def classify_base64():
+    try:
+        image_base = flask.request.form.get("base64")
+        string_buffer = StringIO.StringIO(image_base)
+        image = caffe.io.load_image(string_buffer)
+
+    except Exception as err:
+        logging.info('URL Image open error: %s', err)
+        return flask.render_template(
+            'index.html', has_result=True,
+            result=(False, 'Cannot open image from URL.')
+        )
+    logging.info('Image Base64: %s', image_base)
+    result = app.clf.classify_image(image)
+    return flask.jsonify(result = result)
 
 @app.route('/classify_upload', methods=['POST'])
 def classify_upload():

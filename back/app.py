@@ -4,6 +4,7 @@ import cPickle
 import datetime
 import logging
 import flask
+from flask.ext.cors import CORS
 import werkzeug
 import optparse
 import tornado.wsgi
@@ -23,6 +24,7 @@ ALLOWED_IMAGE_EXTENSIONS = set(['png', 'bmp', 'jpg', 'jpe', 'jpeg', 'gif'])
 
 # Obtain the flask app object
 app = flask.Flask(__name__)
+CORS(app)
 
 
 @app.route('/')

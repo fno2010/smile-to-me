@@ -1,6 +1,5 @@
 import os
 import time
-import cPickle
 import datetime
 import logging
 import flask
@@ -57,7 +56,7 @@ def classify_url():
 def classify_base64():
     try:
         image_base = flask.request.form.get("base64")
-        string_buffer = StringIO.StringIO(image_base)
+        string_buffer = StringIO.StringIO(image_base.decode('base64'))
         image = caffe.io.load_image(string_buffer)
 
     except Exception as err:

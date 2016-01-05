@@ -63,7 +63,7 @@
                         </tbody>
                     </table>
                 </div>
-                <textarea id="my_positions" class="input-lg center" readonly="readonly"></textarea>
+                <!--<textarea id="my_positions" class="input-lg center" readonly="readonly"></textarea>-->
                 <div id="my_result"></div>
                 <a class="btn btn-info" href="javascript:void(take_snapshot())">Take Snapshot</a>
                 <a class="btn btn-primary" href="javascript:void(smile_to_me())">Smile?</a>
@@ -80,13 +80,13 @@
             var image_base64 = $('#my_result').children('img').attr('src').split(',')[1];
             // Push image data to http://127.0.0.1:5000/classfy_url
             $.ajax({
-                url: "http://127.0.0.1:5000/classfy_url",
+                url: "http://127.0.0.1:5000/classify_base64",
                 type: "POST",
                 data: {
                     base64: image_base64
                 },
                 success: function(data) {
-                    var result = JSON.parse(data)['result'];
+                    var result = data['result'];
                     if (result) {
                         var tbody = $('#my_emotion').children();
                         for (var i=0; i<5; i++) {
@@ -118,7 +118,7 @@
             requestAnimationFrame(positionLoop);
             var positions = ctracker.getCurrentPosition();
             if (positions) {
-                document.getElementById('my_positions').innerHTML = positions;
+                // document.getElementById('my_positions').innerHTML = positions;
                 cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
                 ctracker.draw(canvasInput);
             }

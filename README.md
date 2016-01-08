@@ -19,6 +19,20 @@ Click [here](#) to enter the demo.
 
 //TODO: the overview of **smile-to-me**.
 
+## Data Preparation
+
+You need to pre-download some model data to run the caffe back end.
+
+Downlaod caffemodel file from one of following urls to replace `back/models/EmotiW_VGG_S.caffemodel`.
+
+- <http://pan.baidu.com/s/1mhkmJPI>
+- <https://dl.dropboxusercontent.com/u/38822310/demodir/VGG_S_rgb/EmotiW_VGG_S.caffemodel>
+
+Download mean file from one of following urls to replace `back/models/mean.binaryproto`.
+
+- <http://pan.baidu.com/s/1c1vYuVe>
+- <https://dl.dropboxusercontent.com/u/38822310/demodir/VGG_S_rgb/mean.binaryproto>
+
 ## Quickly deploy
 
 Follow the instructions to deploy the demo system in your own platform:
